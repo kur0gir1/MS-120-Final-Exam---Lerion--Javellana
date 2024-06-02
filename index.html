@@ -94,9 +94,13 @@
                 <input type="text" id="source-node" placeholder="Source Node ID" />
                 <input type="text" id="target-node" placeholder="Target Node ID" />
                 <button onclick="addLink()">Add Link</button>
+                <button onclick="removeLink()">Remove Link</button>
               </p>
             </div>
-            <div id="node-count">Node Count: 0</div>
+            <div class="counter-container">
+              <div id="node-count">Node Count: 0</div>
+              <div id="edge-count">Edge Count: 0</div>
+            </div>
         </div>
         
       </main>

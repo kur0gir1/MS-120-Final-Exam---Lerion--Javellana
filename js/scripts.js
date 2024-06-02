@@ -1,8 +1,4 @@
-// ---------- CHARTS ----------
-
 const productsData = generateRandomData(5, 0, 50);
-
-// BAR CHART
 const barChartOptions = {
   series: [
     {
@@ -128,13 +124,10 @@ function generateRandomData(length, min, max) {
   return data;
 }
 
-// Random data for "Purchase Orders" series
-const purchaseOrdersData = generateRandomData(7, 0, 150); // Assuming 7 data points for each series
-
-// Random data for "Sales Orders" series
+const purchaseOrdersData = generateRandomData(7, 0, 150); 
 const salesOrdersData = generateRandomData(7, 0, 100);
 
-// AREA CHART
+
 const areaChartOptions = {
   series: [
     {
@@ -271,15 +264,14 @@ function generateRandomData(length, min, max) {
   return data;
 }
 
-// PIE CHART
 const pieChartOptions = {
-  series: generateRandomData(5, 0, 100), // Generate 5 random numbers between 0 and 100
+  series: generateRandomData(5, 0, 100),
   chart: {
     type: 'pie',
     background: 'transparent',
     height: 350,
   },
-  labels: ['Rent', 'Utilities', 'Salaries', 'Marketing', 'Miscellaneous'], // Example category labels
+  labels: ['Rent', 'Utilities', 'Salaries', 'Marketing', 'Miscellaneous'], 
   colors: ['#2962ff', '#d50000', '#2e7d32', '#ff6d00', '#583cb3'],
   legend: {
     labels: {
@@ -316,16 +308,15 @@ function generateRandomProductivityData(length, min, max) {
   return data;
 }
 
-const productivityData = generateRandomData(6, 0, 100); // Generate random productivity data for Monday to Saturday
+const productivityData = generateRandomData(6, 0, 100); 
 
-// Horizontal Bar Chart Options for Productivity Rate
 const productivityBarChartOptions = {
   series: [{
     data: productivityData,
     name: 'Productivity Rate',
   }],
   chart: {
-    type: 'bar', // Change chart type to horizontal bar
+    type: 'bar', 
     background: 'transparent',
     height: 350,
     toolbar: {
@@ -333,10 +324,10 @@ const productivityBarChartOptions = {
     },
   },
   labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  colors: ['#e81416', '#ffa500', '#faeb36', '#79c314', '#487de7', '#70369d'], // Fix the typo here
+  colors: ['#e81416', '#ffa500', '#faeb36', '#79c314', '#487de7', '#70369d'], 
   plotOptions: {
     bar: {
-      horizontal: true, // Set the bars to be horizontal
+      horizontal: true, 
       distributed: true,
       borderRadius: 4,
       columnWidth: '40%',
@@ -407,7 +398,7 @@ const productivityBarChartOptions = {
     },
   },
   yaxis: {
-    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], // Update categories to Monday to Saturday
+    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     title: {
       text: 'Days of the Week',
       style: {
@@ -430,7 +421,6 @@ const productivityBarChartOptions = {
   },
 };
 
-// Render the horizontal bar chart for productivity rate
 const productivityBarChart = new ApexCharts(
   document.querySelector('#prod-chart'),
   productivityBarChartOptions
@@ -453,17 +443,15 @@ function generateRandomStockData(numDays, startPrice) {
       y: [open.toFixed(2), high.toFixed(2), low.toFixed(2), close.toFixed(2)],
     });
 
-    // Move to the next day
     currentDate.setDate(currentDate.getDate() + 1);
-    startPrice = close; // Next day starts at today's close
+    startPrice = close; 
   }
 
   return stockData;
 }
 
-const stockData = generateRandomStockData(30, 6600); // Generate data for 30 days
+const stockData = generateRandomStockData(30, 6600);
 
-// Stock Chart Options
 const stockChartOptions = {
   series: [{
     data: stockData,
@@ -473,7 +461,7 @@ const stockChartOptions = {
     height: 350,
     background: 'transparent',
     toolbar: {
-      show: false, // Hide controls
+      show: false,
     },
   },
   xaxis: {
@@ -512,14 +500,11 @@ const stockChartOptions = {
   },
 };
 
-// Render the stock chart
 const stockChart = new ApexCharts(
   document.querySelector('#stock-chart'),
   stockChartOptions
 );
 stockChart.render();
-
-// GRAPH THEORY VISUALIZATION USING D3.JS
 
 let nodes = [];
 let links = [];
@@ -531,54 +516,78 @@ const svg = d3.select("#graph-chart")
   .attr("height", '800px')
   .style("background-color", "transparent")
   .style("margin", "auto")
-  .style("border", "2px solid white")
+  .style("border", "2px solid white");
 
-  const width = 1200;
-  const height = 800; 
+const width = 1200;
+const height = 800;
 
-// Force simulation setup
 const simulation = d3.forceSimulation(nodes)
   .force("link", d3.forceLink(links).id(d => d.id).distance(100))
   .force("charge", d3.forceManyBody().strength(-300))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
-// Groups for elements
 const linkGroup = svg.append("g").attr("class", "links");
 const nodeGroup = svg.append("g").attr("class", "nodes");
 const labelGroup = svg.append("g").attr("class", "labels");
 
-// Update graph function
 function updateGraph() {
-  // Update links
+  updateLinks();
+  updateNodes();
+  updateLabels();
+  updateSimulation();
+}
+
+function updateLinks() {
   const link = linkGroup.selectAll("line").data(links, d => `${d.source.id}-${d.target.id}`);
-  link.enter().append("line").attr("stroke", "#ffffff").merge(link);
+  link.enter().append("line")
+    .attr("stroke", "#ffffff")
+    .merge(link);
   link.exit().remove();
+}
 
-  // Update nodes
+function updateNodes() {
   const node = nodeGroup.selectAll("circle").data(nodes, d => d.id);
-  const nodeEnter = node.enter().append("circle").attr("r", 10).attr("fill", "#ffffff").call(d3.drag()
-    .on("start", dragStarted)
-    .on("drag", dragged)
-    .on("end", dragEnded));
+  const nodeEnter = node.enter().append("circle")
+    .attr("r", 10)
+    .attr("fill", "#ffffff")
+    .call(d3.drag()
+      .on("start", dragStarted)
+      .on("drag", dragged)
+      .on("end", dragEnded));
   node.merge(nodeEnter).exit().remove();
+}
 
-  // Update labels
+function updateLabels() {
   const label = labelGroup.selectAll("text").data(nodes, d => d.id);
-  const labelEnter = label.enter().append("text").attr("dy", -15).attr("text-anchor", "middle").attr("fill", "#ffffff").text(d => d.name);
+  const labelEnter = label.enter().append("text")
+    .attr("dy", -15)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#ffffff")
+    .text(d => d.name);
   label.merge(labelEnter).exit().remove();
+}
 
-  // Update simulation
+function updateSimulation() {
   simulation.nodes(nodes).on("tick", () => {
-    link.attr("x1", d => d.source.x).attr("y1", d => d.source.y).attr("x2", d => d.target.x).attr("y2", d => d.target.y);
-    node.attr("cx", d => d.x).attr("cy", d => d.y);
-    label.attr("x", d => d.x).attr("y", d => d.y);
+    linkGroup.selectAll("line")
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    nodeGroup.selectAll("circle")
+      .attr("cx", d => d.x)
+      .attr("cy", d => d.y);
+
+    labelGroup.selectAll("text")
+      .attr("x", d => d.x)
+      .attr("y", d => d.y);
   });
 
   simulation.force("link").links(links);
   simulation.alpha(1).restart();
 }
 
-// Drag functions
 function dragStarted(event, d) {
   if (!event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
@@ -596,51 +605,99 @@ function dragEnded(event, d) {
   d.fy = null;
 }
 
-// Add node function
 function addNode() {
   const nodeNameInput = document.getElementById('node-name');
   const nodeName = nodeNameInput.value.trim();
-
-  if (nodeName) {
-    const newNode = { id: nextNodeId++, name: nodeName };
-    nodes.push(newNode);
-    
-    // Set initial position of the new node to the center of the SVG
-    newNode.x = width / 2;
-    newNode.y = height / 2;
-    
-    nodeNameInput.value = '';
-    updateGraph();
-    updateNodeCount(); // Update node count
+  if (!nodeName) {
+    alert("Node name cannot be empty.");
+    return;
   }
+  if (nodes.some(node => node.name === nodeName)) {
+    alert("Node name must be unique.");
+    return;
+  }
+  const newNode = { id: nextNodeId++, name: nodeName, x: width / 2, y: height / 2 };
+  nodes.push(newNode);
+  nodeNameInput.value = '';
+  updateGraph();
+  updateCounts();
+  centerNode(newNode);
 }
-// Add link function
+
 function addLink() {
   const sourceNodeInput = document.getElementById('source-node');
   const targetNodeInput = document.getElementById('target-node');
   const sourceNodeId = parseInt(sourceNodeInput.value);
   const targetNodeId = parseInt(targetNodeInput.value);
 
+  if (isNaN(sourceNodeId) || isNaN(targetNodeId)) {
+    alert("Source and target node IDs must be numbers.");
+    return;
+  }
+  if (sourceNodeId === targetNodeId) {
+    alert("Source and target nodes must be different.");
+    return;
+  }
+
   const sourceNode = nodes.find(node => node.id === sourceNodeId);
   const targetNode = nodes.find(node => node.id === targetNodeId);
 
-  if (sourceNode && targetNode) {
-    links.push({ source: sourceNode, target: targetNode });
-    sourceNodeInput.value = '';
-    targetNodeInput.value = '';
-    updateGraph();
-  } else {
-    console.error("Source or target node not found.");
+  if (!sourceNode || !targetNode) {
+    alert("Source or target node not found.");
+    return;
   }
+  if (links.some(link => (link.source.id === sourceNodeId && link.target.id === targetNodeId) || (link.source.id === targetNodeId && link.target.id === sourceNodeId))) {
+    alert("Link already exists.");
+    return;
+  }
+  
+  links.push({ source: sourceNode, target: targetNode });
+  sourceNodeInput.value = '';
+  targetNodeInput.value = '';
+  updateGraph();
+  updateCounts();
 }
 
-// Update node count
-function updateNodeCount() {
-  const nodeCountElement = document.getElementById('node-count');
-  nodeCountElement.textContent = `Node Count: ${nodes.length}`;
+function removeLink() {
+  const sourceNodeInput = document.getElementById('source-node');
+  const targetNodeInput = document.getElementById('target-node');
+  const sourceNodeId = parseInt(sourceNodeInput.value);
+  const targetNodeId = parseInt(targetNodeInput.value);
+
+  if (isNaN(sourceNodeId) || isNaN(targetNodeId)) {
+    alert("Source and target node IDs must be numbers.");
+    return;
+  }
+  if (sourceNodeId === targetNodeId) {
+    alert("Source and target nodes must be different.");
+    return;
+  }
+
+  const linkIndex = links.findIndex(link => (link.source.id === sourceNodeId && link.target.id === targetNodeId) || (link.source.id === targetNodeId && link.target.id === sourceNodeId));
+  
+  if (linkIndex === -1) {
+    alert("Link not found.");
+    return;
+  }
+  
+  links.splice(linkIndex, 1);
+  sourceNodeInput.value = '';
+  targetNodeInput.value = '';
+  updateGraph();
+  updateCounts();
 }
 
-// Resize event listener
+function updateCounts() {
+  document.getElementById('node-count').textContent = `Node Count: ${nodes.length}`;
+  document.getElementById('edge-count').textContent = `Edge Count: ${links.length}`;
+}
+
+function centerNode(node) {
+  node.fx = width / 2;
+  node.fy = height / 2;
+  simulation.alpha(1).restart();
+}
+
 window.addEventListener('resize', () => {
   const newWidth = document.getElementById('graph-chart').offsetWidth;
   svg.attr('width', newWidth);
@@ -648,7 +705,5 @@ window.addEventListener('resize', () => {
   simulation.alpha(1).restart();
 });
 
-
-
-updateGraph(); // Initial graph update
-updateNodeCount(); // Initial node count update
+updateGraph();
+updateCounts();
